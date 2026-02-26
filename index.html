@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>eSakayMo | Fare Guide</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<style>
+
+    body {
+        background: url("highway.png") no-repeat center center fixed;
+        background-size: cover;
+        font-family: 'Segoe UI', sans-serif;
+        color: white;
+        }
+
+    body::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        background: rgba(0,0,0,0.65);
+        z-index: -1;
+    }
+
+    .glass {
+        background: rgba(0, 180, 255, 0.15);
+        backdrop-filter: blur(10px);
+        border-radius: 20px;
+        padding: 30px;
+        animation: fadeIn 1.5s ease-in-out;
+        }
+
+    .fare-box {
+        background: #0d3b66;
+        border-radius: 20px;
+        padding: 30px;
+        text-align: center;
+        animation: slideIn 1.2s ease-in-out;
+        }
+
+    .navbar {
+        background-color: rgba(0,0,0,0.85);
+        }
+
+    footer {
+        background: rgba(0,0,0,0.8);
+        padding: 10px;
+        text-align: center;
+        margin-top: 50px;
+        }
+
+    @keyframes fadeIn {
+        from {opacity:0; transform: translateY(20px);}
+        to {opacity:1; transform: translateY(0);}
+        }
+
+    @keyframes slideIn {
+        from {opacity:0; transform: translateX(50px);}
+        to {opacity:1; transform: translateX(0);}
+        }
+
+</style>
+</head>
+
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-dark">
+<div class="container">
+<a class="navbar-brand fw-bold text-info" href="#">🏍 eSakayMo</a>
+<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
+<span class="navbar-toggler-icon"></span>
+</button>
+
+<div class="collapse navbar-collapse" id="navMenu">
+<ul class="navbar-nav me-auto">
+<li class="nav-item"><a class="nav-link active" href="index.html">Home</a></li>
+<li class="nav-item"><a class="nav-link" href="#fare">Fare Matrix</a></li>
+<li class="nav-item"><a class="nav-link" href="#">Schedule</a></li>
+<li class="nav-item"><a class="nav-link" href="#">Help</a></li>
+</ul>
+
+<a href="registration.html" target="_self" class="btn btn-info">Create Account</a>
+</div>
+</div>
+</nav>
+
+<div class="container text-center mt-5">
+<div class="glass">
+<h1 class="display-5 fw-bold">Welcome to <span class="text-warning">eSakayMo</span> Fare Guide</h1>
+<details>
+    <summary> Instructions </summary>
+    <p>Compute your motorcycle taxi fare along MRT Line 3 (North Avenue – Taft Avenue)</p>            
+</details>
+</div>
+</div>
+
+<div class="container mt-5" id="fare">
+<div class="row align-items-center">
+
+<div class="col-md-8">
+<div class="glass">
+
+<h4 class="text-warning text-center mb-3">Fare Matrix</h4>
+
+<label>Pick-up Station:</label>
+<select id="pickup" class="form-select mb-3">
+<option>North Avenue</option>
+<option>Quezon Avenue</option>
+<option>GMA Kamuning</option>
+<option>Araneta Center Cubao</option>
+<option>Ortigas</option>
+<option>Shaw Boulevard</option>
+<option>Taft Avenue</option>
+</select>
+
+<label>Drop-off Station:</label>
+<select id="dropoff" class="form-select mb-3">
+<option>North Avenue</option>
+<option>Quezon Avenue</option>
+<option>GMA Kamuning</option>
+<option>Araneta Center Cubao</option>
+<option>Ortigas</option>
+<option>Shaw Boulevard</option>
+<option>Taft Avenue</option>
+</select>
+<br>
+
+<select id="discountType" class="form-select mb-3">
+<option value="regular">Regular</option>
+<option value="discount">Student / Senior / PWD (20% OFF)</option>
+</select>
+
+<button class="btn btn-warning w-100" onclick="calculateFare()">Compute Fare</button>
+
+</div>
+</div>
+
+<div class="col-md-4">
+<div class="fare-box">
+<h4>Fare:</h4>
+<h2 id="fareResult">₱ 0.00</h2>
+</div>
+</div>
+
+</div>
+</div>
+
+<footer>
+<p>Abenojar, Lim, Singh | Grade 9 Sapphire 2026</p>
+<p>Source: <a href="https://www.metrolinemap.com/metro/manila/" target="_blank" class="text-info">Metro Line Map</a></p>
+</footer>
+
+<script>
+
+let baseFare = 50;     
+let perKMrate = 15;    
+let baseKM = 2;         
+
+let stationIndex = {
+"North Avenue":0,
+"Quezon Avenue":1,
+"GMA Kamuning":2,
+"Araneta Center Cubao":3,
+"Ortigas":4,
+"Shaw Boulevard":5,
+"Taft Avenue":6
+};
+
+
+function calculateFare(){
+
+let pickup = document.getElementById("pickup").value;
+let dropoff = document.getElementById("dropoff").value;
+let discountType = document.getElementById("discountType").value;
+
+let distance = Math.abs(stationIndex[pickup] - stationIndex[dropoff]) * 1.5;
+
+let totalFare = baseFare;
+
+
+if(distance > baseKM){
+    totalFare += (distance - baseKM) * perKMrate;
+}
+
+if(discountType === "discount"){
+    totalFare = totalFare * 0.80;
+}
+
+totalFare = Math.round(totalFare * 100) / 100;
+
+document.getElementById("fareResult").innerHTML = "₱ " + totalFare.toFixed(2);
+
+}
+
+</script>
+
+</body>
+</html>
